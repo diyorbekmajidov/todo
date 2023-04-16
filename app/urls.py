@@ -1,4 +1,12 @@
-from .views import CreateUserView, UserLogOut,UserLogIn,CreateTodo, TodoGetId, TodoUpdate, TodoDelete
+from .views import (
+    CreateUserView, 
+    UserLogOut,
+    UserLogIn,
+    CreateTodo, 
+    TodoGetId, 
+    TodoUpdate, 
+    TodoDelete, 
+    GetAllUsers)
 from django.urls import path
 
 urlpatterns = [
@@ -9,4 +17,5 @@ urlpatterns = [
     path('gettodo/<int:pk>/', TodoGetId.as_view()),
     path('updatetodo/<int:pk>/', TodoUpdate.as_view()),
     path('deletetodo/<int:pk>/', TodoDelete.as_view()),
+    path('getusers/', GetAllUsers.as_view()),
 ]

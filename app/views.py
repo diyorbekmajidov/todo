@@ -13,6 +13,18 @@ from django.contrib.auth.models import User
 # Create your views here.
 class CreateUserView(APIView):
     def post(self, request):
+        """
+        url: https://majidovdiyorbek.pythonanywhere.com/api/create/
+        Create a new user
+        input: json->{
+            "username": "username", 
+            "password": "password",
+            "email": "email",
+            "first_name": "first_name",
+            "last_name": "last_name"
+
+        }
+        """
         if request.method == 'POST':
         # Get the user data from the request data
             username = request.data.get('username')
@@ -29,6 +41,11 @@ class CreateUserView(APIView):
         return Response({'error': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
     
 class UserLogOut(APIView):
+    """
+    Logout a user
+    input: https://majidovdiyorbek.pythonanywhere.com/api/logout/
+    
+    """
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     
@@ -37,17 +54,47 @@ class UserLogOut(APIView):
         return Response(status=status.HTTP_200_OK)
 
 class UserLogIn(APIView):
+    """
+    url: https://majidovdiyorbek.pythonanywhere.com/api/userlogin/
+    Login a user
+    input: json->{
+        "username": "username",
+        "password": "password"
+        }
+        """
+    
     permission_classes = [IsAuthenticated]
     def post(self, request):
         user = request.user
+        token = Token.objects.get(user=user)
+        if token:
+            token.delete()
         token= Token.objects.create(user=user)
         return Response({"token":token.key})
-    
+
+class GetAllUsers(APIView):
+    """
+    Get all users
+    input: https://majidovdiyorbek.pythonanywhere.com/api/getusers/
+
+    """
+    def get(self, request):
+        data = User.objects.all()
+        serializer = UserSerializer(instance=data, many=True)
+        return Response(serializer.data)
+
 class CreateTodo(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
+        """
+        Create a new todo
+        input: json->{
+            "title": "title",
+            "important": "important"
+        }
+            """
         data = request.data
         serializer = TodoSerializer(data=data)
         if serializer.is_valid():
@@ -55,6 +102,14 @@ class CreateTodo(APIView):
             return Response(serializer.data)
         return Response(serializer.errors)
     def get(self, request):
+        """
+        Get all todos
+        input: https://majidovdiyorbek.pythonanywhere.com/api/create/
+        return: json->{
+            "title": "title",
+            "important": "important",
+        }
+        """
         user = request.user
         data = Todo.objects.filter(user=user)
         serializer = TodoSerializer(instance=data, many=True)
@@ -65,6 +120,15 @@ class TodoGetId(APIView):
     permission_classes = [IsAuthenticated]
     
     def get(self, request, pk):
+        """
+        Get todo by id
+        input: https://majidovdiyorbek.pythonanywhere.com/api/gettodo/id/
+        return: json->{
+            "title": "title",
+            "important": "important",
+        }
+        
+        """
         user = request.user
         data = Todo.objects.filter(user=user, id=pk)
         serializer = TodoSerializer(instance=data, many=True)
@@ -75,6 +139,15 @@ class TodoUpdate(APIView):
     permission_classes = [IsAuthenticated]
     
     def put(self, request, pk):
+        """
+        Update todo by id
+        input: https://majidovdiyorbek.pythonanywhere.com/api/updatetodo/id/
+        return: json->{
+            "title": "title",
+            "important": "important",
+        }
+        
+        """
         user = request.user
         data = Todo.objects.get(user=user, id=pk)
         serializer = TodoSerializer(data, data=request.data)
@@ -85,6 +158,11 @@ class TodoUpdate(APIView):
     
 class TodoDelete(APIView):
     def delete(self, request, pk):
+        """
+        Delete todo by id
+        input: https://majidovdiyorbek.pythonanywhere.com/api/deletetodo/id/
+        return: j{"OK delete":"200"}
+        """
         user = request.user
         data = Todo.objects.get(user=user, id=pk)
         data.delete()

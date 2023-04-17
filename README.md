@@ -148,7 +148,7 @@ The modani API has the following endpoints:
 
 <div id="deletetodo">
 
-**DELETE** ```api/deletetodo```
+**POST** ```api/deletetodo```
 
 ### url to delete todo
 ```python

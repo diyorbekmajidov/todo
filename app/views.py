@@ -96,6 +96,7 @@ class CreateTodo(APIView):
         }
             """
         data = request.data
+        data['user'] = request.user.id
         serializer = TodoSerializer(data=data)
         if serializer.is_valid():
             serializer.save()

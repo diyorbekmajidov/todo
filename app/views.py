@@ -158,7 +158,7 @@ class TodoUpdate(APIView):
         return Response(serializer.errors)
     
 class TodoDelete(APIView):
-    def delete(self, request, pk):
+    def post(self, request, pk):
         """
         Delete todo by id
         input: https://majidovdiyorbek.pythonanywhere.com/api/deletetodo/id/

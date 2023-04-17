@@ -8,6 +8,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 
 
 # Create your views here.
@@ -158,16 +159,21 @@ class TodoUpdate(APIView):
         return Response(serializer.errors)
     
 class TodoDelete(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     def post(self, request, pk):
         """
         Delete todo by id
         input: https://majidovdiyorbek.pythonanywhere.com/api/deletetodo/id/
         return: j{"OK delete":"200"}
         """
-        user = request.user
-        data = Todo.objects.get(user=user, id=pk)
-        data.delete()
-        return Response({"status":200})
+        try: 
+            user = request.user
+            data = Todo.objects.get(user=user, id=pk)
+            data.delete()
+            return Response({"status":200})
+        except ObjectDoesNotExist:
+            return Response({"status":404})
 
         
 

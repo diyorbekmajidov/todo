@@ -167,7 +167,7 @@ class TodoDelete(APIView):
         user = request.user
         data = Todo.objects.get(user=user, id=pk)
         data.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({"status":200})
 
         
 

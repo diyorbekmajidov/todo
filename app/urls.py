@@ -8,6 +8,7 @@ from .views import (
     TodoDelete, 
     GetAllUsers)
 from django.urls import path
+from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
     path('create/', CreateUserView.as_view(), name='create_user'),
@@ -18,4 +19,5 @@ urlpatterns = [
     path('updatetodo/<int:pk>/', TodoUpdate.as_view()),
     path('deletetodo/<int:pk>/', TodoDelete.as_view()),
     path('getusers/', GetAllUsers.as_view()),
+    path('gettoken/', obtain_auth_token, name='api_token_auth'),
 ]

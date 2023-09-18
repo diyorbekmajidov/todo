@@ -9,8 +9,12 @@ from .views import (
     GetAllUsers)
 from django.urls import path
 from rest_framework.authtoken.views import obtain_auth_token
+from . import views
+
+
 
 urlpatterns = [
+    path('', views.home, name='home'),
     path('create/', CreateUserView.as_view(), name='create_user'),
     path('logout/', UserLogOut.as_view(), name='logout'),
     path("userlogin/", UserLogIn.as_view()),

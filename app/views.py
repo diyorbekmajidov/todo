@@ -9,7 +9,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.translation import gettext as _
 
+def home(request):
+    trans = _('Hello')
+    return render(request, 'home.html', {'trans': trans})
 
 # Create your views here.
 class CreateUserView(APIView):
